@@ -124,6 +124,22 @@ inline std::string foldKey(const std::string& s) {
       out.push_back(static_cast<char>(c));
       out.push_back(static_cast<char>(d));
       i++;
+    } else if (c == 0xD0 && i + 1 < s.size()) {  // Cyrillic upper case -> lower case
+      const unsigned char d = static_cast<unsigned char>(s[i + 1]);
+      if (d >= 0x90 && d <= 0x9F) {  // А..П -> а..п
+        out.push_back(static_cast<char>(0xD0));
+        out.push_back(static_cast<char>(d + 0x20));
+      } else if (d >= 0xA0 && d <= 0xAF) {  // Р..Я -> р..я
+        out.push_back(static_cast<char>(0xD1));
+        out.push_back(static_cast<char>(d - 0x20));
+      } else if (d == 0x81) {  // Ё -> ё
+        out.push_back(static_cast<char>(0xD1));
+        out.push_back(static_cast<char>(0x91));
+      } else {
+        out.push_back(static_cast<char>(c));
+        out.push_back(static_cast<char>(d));
+      }
+      i++;
     } else {
       out.push_back(static_cast<char>(c));
     }
@@ -392,6 +408,22 @@ inline std::string toHeadline(const std::string& s) {
       } else if (d >= 0xA0 && d <= 0xBE && d != 0xB7) {
         out.push_back(static_cast<char>(c));
         out.push_back(static_cast<char>(d - 0x20));
+      } else {
+        out.push_back(static_cast<char>(c));
+        out.push_back(static_cast<char>(d));
+      }
+      i++;
+    } else if ((c == 0xD0 || c == 0xD1) && i + 1 < s.size()) {  // Cyrillic lower case -> upper case
+      const unsigned char d = static_cast<unsigned char>(s[i + 1]);
+      if (c == 0xD0 && d >= 0xB0 && d <= 0xBF) {  // а..п -> А..П
+        out.push_back(static_cast<char>(0xD0));
+        out.push_back(static_cast<char>(d - 0x20));
+      } else if (c == 0xD1 && d >= 0x80 && d <= 0x8F) {  // р..я -> Р..Я
+        out.push_back(static_cast<char>(0xD0));
+        out.push_back(static_cast<char>(d + 0x20));
+      } else if (c == 0xD1 && d == 0x91) {  // ё -> Ё
+        out.push_back(static_cast<char>(0xD0));
+        out.push_back(static_cast<char>(0x81));
       } else {
         out.push_back(static_cast<char>(c));
         out.push_back(static_cast<char>(d));

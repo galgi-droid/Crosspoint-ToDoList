@@ -175,7 +175,7 @@ the firmware under Releases.
 
 ## License
 
-MIT, like CrossPoint. Font [Patrick Hand](https://fonts.google.com/specimen/Patrick+Hand)
+MIT, like CrossPoint. Cyrillic letters in the list font: [Pangolin](https://fonts.google.com/specimen/Pangolin) © The Pangolin Project Authors, SIL Open Font License 1.1 (see `licenses/Pangolin-OFL.txt`). Font [Patrick Hand](https://fonts.google.com/specimen/Patrick+Hand)
 © Patrick Wagesreiter, SIL Open Font License 1.1.
 
 Made with the help of Claude.

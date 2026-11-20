@@ -45,6 +45,11 @@ static void testSerialize() {
 }
 
 static void testMerge() {
+  {
+    auto ru = parse("Молоко\nЁжик\n");
+    const auto rr = merge(ru, "молоко\nЁЖИК\nХлеб\n");
+    CHECK(rr.added == 1 && rr.skipped == 2);
+  }
   auto items = parse("[x] Milch\n[ ] Brot\n");
   const auto r = merge(items, "milch\nBROT\nKäse\nkäse\n");
   CHECK(r.reopened == 1);
@@ -117,6 +122,8 @@ static void testNames() {
   CHECK(!isListPath("/Lists/.hidden.txt"));
   CHECK(nameFromPath("/Lists/Urlaub packen.txt") == "Urlaub packen");
   CHECK(toHeadline("Einkauf") == "EINKAUF");
+  CHECK(toHeadline("Покупки на ёлку, яблоки") == "ПОКУПКИ НА ЁЛКУ, ЯБЛОКИ");
+  CHECK(toHeadline("Дела Todo") == "ДЕЛА TODO");
   CHECK(toHeadline("Größe & Maße 2") == "GRÖSSE & MASSE 2");
   CHECK(toHeadline("ÄÖÜ äöü é") == "ÄÖÜ ÄÖÜ É");
 }
